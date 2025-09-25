@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynamic Form</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-3">
+
+<div class="container">
+  <h2>ฟอร์มพนักงาน</h2>
+  <div class="mb-3">
+    <label for="company" class="form-label">เลือกบริษัท</label>
+    <select id="company" class="form-select" onchange="loadEmployees()">
+      <option value="">-- เลือกบริษัท --</option>
+      <option value="A">บริษัท A</option>
+      <option value="B">บริษัท B</option>
+    </select>
+  </div>
+
+  <form id="employeeForm"></form>
+</div>
+
+<script>
+const employeeData = {
+  "A": ["นาย A", "นาย B", "นาย C", "นาย D"],
+  "B": ["นาย X", "นาย Y", "นาย Z"]
+};
+
+function loadEmployees() {
+  const company = document.getElementById('company').value;
+  const container = document.getElementById('employeeForm');
+  container.innerHTML = '';
+  if(company && employeeData[company]){
+    employeeData[company].forEach(name => {
+      container.innerHTML += `
+        <div class="mb-2">
+          <label class="form-label">${name}</label>
+          <select class="form-select" name="status_${name}">
+            <option value="ไปได้">ไปได้</option>
+            <option value="ไม่ได้">ไม่ได้</option>
+          </select>
+          <input type="text" class="form-control mt-1" name="replacement_${name}" placeholder="คนแทน">
+        </div>
+      `;
+    });
+    container.innerHTML += `<button type="button" class="btn btn-primary mt-3" onclick="submitForm()">Submit</button>`;
+  }
+}
+
+function submitForm() {
+  const data = {};
+  document.querySelectorAll('#employeeForm select, #employeeForm input').forEach(el=>{
+    data[el.name] = el.value;
+  });
+
+  fetch("https://prod-xx-xxx-xxx.logic.azure.com/workflows/xxxx/trigger", {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(res => alert("ส่งข้อมูลเรียบร้อย"))
+    .catch(err => alert("เกิดข้อผิดพลาด"));
+}
+</script>
+</body>
+</html>
