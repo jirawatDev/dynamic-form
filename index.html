@@ -55,7 +55,7 @@ function submitForm() {
     data[el.name] = el.value;
   });
 
-  fetch("https://prod-xx-xxx-xxx.logic.azure.com/workflows/xxxx/trigger", {
+  fetch("https://defaultad8c1baa41294a92b0a4b19a1fa329.b9.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/37559b7307f84285a2d828be210714df/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HFpFTuAZFQrboNOSBU1i6mH17zbh6Vd5_QzMxhY5bBM", {
     method: "POST",
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
